@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Piedra, Papel o Tijera</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Familjen Grotesk', sans-serif;
+      color: rgb(0, 0, 0);
+      min-height: 100vh;
+      background-image: url('img/background.jpg');
+      background-size: cover; 
+      background-position: center; 
+      background-repeat: no-repeat;
+      min-height: 100vh;
+    }
+
+  
+    header {
+      margin-top: 0px;
+    }
+
+    header h1 {
+      font-size: 30px;
+      font-style: italic;
+    }
+
+    #imagenEleccionJugador,
+    #imagenEleccionCompu,
+    #vs,
+    #botonReiniciar {
+      display: none;
+    }
+
+    .opciones {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+    }
+
+    .opcion {
+      background: none;
+      border: none;
+    }
+
+    .opcion img {
+      width: 150px;
+      height: 150px;
+      margin: 0px;
+      transition: transform 0.9s ease;
+    }
+
+    .opcion:hover {
+      filter: drop-shadow(8px 8px 20px rgba(0, 0, 0, 0.7));
+      transform: scale(1.1);
+    }
+
+    .resultado {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: auto 150px auto auto;
+      grid-gap: 16px;
+      justify-items: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .resultado #enunciado         { grid-column: 1 / -1; }
+    .resultado #imagenEleccionJugador  { grid-column: 1 / 2; }
+    .resultado #vs                 { grid-column: 2 / 3; }
+    .resultado #imagenEleccionCompu    { grid-column: 2 / 3; }
+    .resultado #mensajeResultado  { grid-column: 1 / -1; }
+    .resultado #botonReiniciar    { grid-column: 1 / -1; }
+
+    .resultado img {
+      width: 150px;
+      height: 150px;
+      margin: 0px;
+      transition: transform 0.3 ease;
+    }
+
+    .resultado img.agrandar {
+      animation: crecer 0.5s ease;
+    }
+
+    #botonReiniciar {
+      margin: 10px;
+      transition: transform 0.9s ease, filter 0.5s ease;
+      background: none;
+
+      border-color: antiquewhite;
+      color: antiquewhite;
+
+      width: 140px;
+      height: 40px;
+
+      padding: 0.25rem 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    #botonReiniciar:hover {
+      filter: drop-shadow(8px 8px 20px rgba(0, 0, 0, 0.7));
+      transform: scale(1.1);
+    }
+
+    @keyframes crecer {
+      from {
+        transform: scale(0);
+      }
+
+      to {
+        transform: scale(1);
+      }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+        text-align: center;
+      }
+
+      .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>¿Piedra, Papel o Tijera?</h1>
+  </header>
+
+  <div id="overlay-confeti"></div>
+
+  <section class="opciones">
+    <button class="opcion" id="piedra">
+      <img src="img/piedra.png" alt="Piedra">
+    </button>
+    <button class="opcion" id="papel">
+      <img src="img/papel.png" alt="Papel">
+    </button>
+    <button class="opcion" id="tijera">
+      <img src="img/tijera.png" alt="Tijera">
+    </button>
+  </section>
+  <section class="resultado">
+    <h2 id="enunciado">Elige una opción para jugar...</h2>
+    <img id="imagenEleccionJugador" src="" alt="Elección del resultado">
+    <h3 id="vs">VS</h3>
+    <img id="imagenEleccionCompu" src="" alt="Elección de la computadora">
+    <h2 id="mensajeResultado"></h2>
+    <button id="botonReiniciar">Reiniciar Juego</button>
+  </section>
+  
+
+  <div id="contador"></div>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+  <script>
+    const OPCIONES = ['piedra', 'papel', 'tijera'];
+
+    const RESULTADO = document.getElementById("mensajeResultado");
+    const IMG_COMP = document.getElementById("imagenEleccionCompu");
+    const IMG_JUG = document.getElementById("imagenEleccionJugador");
+    const VS = document.getElementById("vs");
+    const ENUNCIADO = document.getElementById("enunciado");
+    const BOTON_REINICIAR = document.getElementById("botonReiniciar");
+
+    function opcionComputadora() {
+      const RANDOM_INDEX = Math.floor(Math.random() * OPCIONES.length);
+      return OPCIONES[RANDOM_INDEX];
+    }
+
+    function decidirGanador(jugador, computadora) {
+      var mensaje = "";
+      if (jugador === computadora) {
+        mensaje = "Empate";
+      } else if (
+        (jugador === 'piedra' && computadora === 'tijera') ||
+        (jugador === 'papel' && computadora === 'piedra') ||
+        (jugador === 'tijera' && computadora === 'papel')
+      ) {
+        mensaje = "¡Ganaste! 🎉";
+      } else {
+        mensaje = "Perdiste 😢";
+      }
+      return mensaje;
+    }
+
+    const botones = document.querySelectorAll('.opcion');
+
+    botones.forEach(boton => {
+      boton.addEventListener('click', () => {
+        const eleccionJugador = boton.id;
+        const eleccionCompu = opcionComputadora();
+        ENUNCIADO.style.display = "none";
+
+
+        // Mostrar la imagen del jugador YA y agrandarla
+        IMG_JUG.src = `img/${eleccionJugador}.png`;
+        IMG_JUG.style.display = "inline-block";
+        VS.style.display = "inline-block";
+
+
+
+        IMG_JUG.classList.add('agrandar');  // agranda la imagen jugador
+        setTimeout(() => {
+          IMG_JUG.classList.remove('agrandar');  // vuelve al tamaño original
+        }, 600);
+
+        // Ocultamos el resultado primero para que se prepare
+        RESULTADO.textContent = "";
+        IMG_COMP.style.display = "none";
+
+
+        // Después de 1 segundo mostramos la imagen de la computadora y la agrandamos
+        setTimeout(() => {
+          showCounter(() => {
+          IMG_COMP.src = `img/${eleccionCompu}.png`;
+          IMG_COMP.style.display = "inline-block";
+
+          IMG_COMP.classList.add('agrandar'); // agranda la imagen computadora
+          setTimeout(() => {
+            IMG_COMP.classList.remove('agrandar'); // vuelve al tamaño original
+          }, 600);
+
+          // Medio segundo después mostramos el resultado
+          setTimeout(() => {
+            const mensaje = decidirGanador(eleccionJugador, eleccionCompu);
+            RESULTADO.textContent = ` ${mensaje}`;
+              if (mensaje.includes('Ganaste')){
+                confetti({
+                particleCount: 200,
+                spread: 70,
+                origin: { y: 0.6 }
+              });
+              }
+            setTimeout(() => {
+              BOTON_REINICIAR.style.display = "inline-block";
+            }, 1000);
+          }, 1000);
+
+
+
+          });
+        }, 1000);
+
+
+      }, 3000);
+
+
+    });
+
+    BOTON_REINICIAR.addEventListener('click', () => {
+      IMG_JUG.style.display = "none";
+      IMG_COMP.style.display = "none";
+      VS.style.display = "none";
+      RESULTADO.textContent = "";
+      ENUNCIADO.style.display = "block";
+      BOTON_REINICIAR.style.display = "none";
+    });
+
+    function showCounter(next) {
+    const ctr = document.getElementById('contador');
+    ctr.classList.add('mostrar-contador');
+    ctr.textContent = '3';
+    setTimeout(() => {
+      ctr.textContent = '2';
+      setTimeout(() => {
+        ctr.textContent = '1';
+        setTimeout(() => {
+          ctr.classList.remove('mostrar-contador');
+          ctr.textContent = '';
+          next();   // acá continua tu flujo de mostrar compu y resultado
+        }, 1000);
+      }, 1000);
+    }, 1000);
+  }
+
+  </script>
+</body>
+
+</html>
