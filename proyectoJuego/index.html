@@ -17,15 +17,15 @@
       background-repeat: no-repeat;
       min-height: 100vh;
     }
-
   
     header {
       margin-top: 0px;
     }
 
     header h1 {
-      font-size: 30px;
-      font-style: italic;
+      font-size: 40px;
+      text-align: center;
+      text-shadow: 2px 2px 5px rgb(54, 50, 57);
     }
 
     #imagenEleccionJugador,
@@ -38,7 +38,11 @@
     .opciones {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 16px;
+      grid-template-rows: auto 150px auto auto;
+      grid-gap: 16px;
+      justify-items: center;
+      align-items: center;
+      text-align: center;
     }
 
     .opcion {
@@ -60,7 +64,7 @@
 
     .resultado {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       grid-template-rows: auto 150px auto auto;
       grid-gap: 16px;
       justify-items: center;
@@ -68,18 +72,54 @@
       text-align: center;
     }
 
-    .resultado #enunciado         { grid-column: 1 / -1; }
+
+    .resultado #enunciado  { grid-column: 1 / -1; }
+    .resultado #contador {grid-column: 1 / -1;}
     .resultado #imagenEleccionJugador  { grid-column: 1 / 2; }
     .resultado #vs                 { grid-column: 2 / 3; }
-    .resultado #imagenEleccionCompu    { grid-column: 2 / 3; }
+    .resultado #imagenEleccionCompu    { grid-column: 3 / 4; }
     .resultado #mensajeResultado  { grid-column: 1 / -1; }
     .resultado #botonReiniciar    { grid-column: 1 / -1; }
+
+    #contador {
+      font-size: 65px;
+      font-weight: bold;
+      color: rgb(20, 55, 24);
+    }
+
+    .mostrar-contador {
+      animation: zoom 0.15s;
+    }
+
+    @keyframes zoom {
+      from { transform: scale(0.5); }
+      to { transform: scale(1); }
+    }
 
     .resultado img {
       width: 150px;
       height: 150px;
       margin: 0px;
       transition: transform 0.3 ease;
+    }
+
+    .resultado-empate {
+      color: yellow;
+      text-shadow: 2px 2px 5px yellow;
+      animation: crecerVolver 1s ease-in-out;
+      font-size: 40px;
+    }
+    .resultado-ganaste {
+      color: green;
+      text-shadow: 2px 2px 5px green;
+      animation: crecerVolver 1s ease-in-out;
+      font-size: 40px;
+    }
+    .resultado-perdiste {
+      color: red;
+      text-shadow: 2px 2px 5px red;
+      animation: crecerVolver 1s ease-in-out;
+      font-size: 40px;
     }
 
     .resultado img.agrandar {
@@ -116,6 +156,18 @@
       }
     }
 
+    @keyframes crecerVolver {
+      0% {
+        transform: scale(0);
+      }
+      50% {
+        transform: scale(1.8); /* Acá definís cuánto querés que crezca */
+      }
+      100% {
+        transform: scale(1);
+      }
+    } 
+
     @media (max-width: 600px) {
       h1 {
         font-size: 2rem;
@@ -128,6 +180,8 @@
         gap: 10px;
       }
     }
+
+
   </style>
 </head>
 
@@ -136,7 +190,6 @@
     <h1>¿Piedra, Papel o Tijera?</h1>
   </header>
 
-  <div id="overlay-confeti"></div>
 
   <section class="opciones">
     <button class="opcion" id="piedra">
@@ -149,8 +202,10 @@
       <img src="img/tijera.png" alt="Tijera">
     </button>
   </section>
+
   <section class="resultado">
     <h2 id="enunciado">Elige una opción para jugar...</h2>
+    <div id="contador"></div>
     <img id="imagenEleccionJugador" src="" alt="Elección del resultado">
     <h3 id="vs">VS</h3>
     <img id="imagenEleccionCompu" src="" alt="Elección de la computadora">
@@ -159,44 +214,77 @@
   </section>
   
 
-  <div id="contador"></div>
+  
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
   <script>
     const OPCIONES = ['piedra', 'papel', 'tijera'];
 
-    const RESULTADO = document.getElementById("mensajeResultado");
-    const IMG_COMP = document.getElementById("imagenEleccionCompu");
+    const BOTONES = document.querySelectorAll('.opcion');
     const IMG_JUG = document.getElementById("imagenEleccionJugador");
+    const IMG_COMP = document.getElementById("imagenEleccionCompu");
     const VS = document.getElementById("vs");
-    const ENUNCIADO = document.getElementById("enunciado");
+    const RESULTADO = document.getElementById("mensajeResultado");
     const BOTON_REINICIAR = document.getElementById("botonReiniciar");
+    const ENUNCIADO = document.getElementById("enunciado");
+    const CONTADOR = document.getElementById("contador");
 
     function opcionComputadora() {
       const RANDOM_INDEX = Math.floor(Math.random() * OPCIONES.length);
       return OPCIONES[RANDOM_INDEX];
     }
 
+
     function decidirGanador(jugador, computadora) {
       var mensaje = "";
       if (jugador === computadora) {
-        mensaje = "Empate";
+        mensaje = "EMPATE";
       } else if (
         (jugador === 'piedra' && computadora === 'tijera') ||
         (jugador === 'papel' && computadora === 'piedra') ||
         (jugador === 'tijera' && computadora === 'papel')
       ) {
-        mensaje = "¡Ganaste! 🎉";
+        mensaje = "GANASTE";
       } else {
-        mensaje = "Perdiste 😢";
+        mensaje = "PERDISTE";
       }
       return mensaje;
     }
 
-    const botones = document.querySelectorAll('.opcion');
+    function mostrarResultado(resultadoTexto) {
+      // Limpiamos las clases anteriores
+      RESULTADO.classList.remove("resultado-empate", "resultado-ganaste", "resultado-perdiste");
 
-    botones.forEach(boton => {
+      // Determinamos el color según el texto
+      if (resultadoTexto === "EMPATE") {
+        RESULTADO.classList.add("resultado-empate");
+      } else if (resultadoTexto === "GANASTE") {
+        RESULTADO.classList.add("resultado-ganaste");
+      } else if (resultadoTexto === "PERDISTE") {
+        RESULTADO.classList.add("resultado-perdiste");
+      }
+
+      // Mostramos el texto
+      RESULTADO.textContent = resultadoTexto;
+    }
+
+    let juegoBloqueado = false;
+
+    BOTONES.forEach(boton => {
       boton.addEventListener('click', () => {
+        if (juegoBloqueado) {
+          // Si el juego está bloqueado, no hacemos la jugada,
+          // sino que animamos el botón de reiniciar para llamar la atención
+          BOTON_REINICIAR.classList.add('agrandar');
+          setTimeout(() => {
+            BOTON_REINICIAR.classList.remove('agrandar');
+          }, 600);
+          return; // salimos para no ejecutar la jugada
+        }
+
+        juegoBloqueado = true;
+        BOTON_REINICIAR.style.display = "inline-block";
+
         const eleccionJugador = boton.id;
         const eleccionCompu = opcionComputadora();
         ENUNCIADO.style.display = "none";
@@ -225,22 +313,16 @@
           IMG_COMP.src = `img/${eleccionCompu}.png`;
           IMG_COMP.style.display = "inline-block";
 
-          IMG_COMP.classList.add('agrandar'); // agranda la imagen computadora
+          IMG_COMP.classList.add('crecer'); // agranda la imagen computadora
           setTimeout(() => {
-            IMG_COMP.classList.remove('agrandar'); // vuelve al tamaño original
+            IMG_COMP.classList.remove('crecer'); // vuelve al tamaño original
           }, 600);
 
           // Medio segundo después mostramos el resultado
           setTimeout(() => {
             const mensaje = decidirGanador(eleccionJugador, eleccionCompu);
-            RESULTADO.textContent = ` ${mensaje}`;
-              if (mensaje.includes('Ganaste')){
-                confetti({
-                particleCount: 200,
-                spread: 70,
-                origin: { y: 0.6 }
-              });
-              }
+            mostrarResultado (mensaje);
+
             setTimeout(() => {
               BOTON_REINICIAR.style.display = "inline-block";
             }, 1000);
@@ -252,7 +334,7 @@
         }, 1000);
 
 
-      }, 3000);
+      });
 
 
     });
@@ -264,6 +346,8 @@
       RESULTADO.textContent = "";
       ENUNCIADO.style.display = "block";
       BOTON_REINICIAR.style.display = "none";
+
+      juegoBloqueado = false;
     });
 
     function showCounter(next) {
@@ -280,7 +364,7 @@
           next();   // acá continua tu flujo de mostrar compu y resultado
         }, 1000);
       }, 1000);
-    }, 1000);
+    });
   }
 
   </script>
