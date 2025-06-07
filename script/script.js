@@ -1,55 +1,70 @@
 const OPCIONES = ['piedra', 'papel', 'tijera'];
 
-    const BOTONES = document.querySelectorAll('.opcion');
-    const IMG_JUG = document.getElementById("imagenEleccionJugador");
-    const IMG_COMP = document.getElementById("imagenEleccionCompu");
-    const VS = document.getElementById("vs");
-    const RESULTADO = document.getElementById("mensajeResultado");
-    const ENUNCIADO = document.getElementById("enunciado");
-    const CONTADOR = document.getElementById("contador");
+const BOTONES = document.querySelectorAll('.opcion');
+const IMG_JUG = document.getElementById("imagenEleccionJugador");
+const IMG_COMP = document.getElementById("imagenEleccionCompu");
+const VS = document.getElementById("vs");
+const RESULTADO = document.getElementById("mensajeResultado");
+const ENUNCIADO = document.getElementById("enunciado");
+const CONTADOR = document.getElementById("contador");
 
-    function opcionComputadora() {
-      const RANDOM_INDEX = Math.floor(Math.random() * OPCIONES.length);
-      return OPCIONES[RANDOM_INDEX];
-    }
+function opcionComputadora() {
+    const RANDOM_INDEX = Math.floor(Math.random() * OPCIONES.length);
+    return OPCIONES[RANDOM_INDEX];
+}
 
 
 
-    function decidirGanador(jugador, computadora) {
-      var mensaje = "";
-      if (jugador === computadora) {
+function decidirGanador(jugador, computadora) {
+    var mensaje = "";
+    if (jugador === computadora) {
         mensaje = "EMPATE";
-      } else if (
+    } else if (
         (jugador === 'piedra' && computadora === 'tijera') ||
         (jugador === 'papel' && computadora === 'piedra') ||
         (jugador === 'tijera' && computadora === 'papel')
-      ) {
+    ) {
         mensaje = "GANASTE";
-      } else {
+    } else {
         mensaje = "PERDISTE";
-      }
-      return mensaje;
     }
+    return mensaje;
+}
 
-    function mostrarResultado(resultadoTexto) {
+function mostrarResultado(resultadoTexto) {
 
-      RESULTADO.classList.remove("resultado-empate", "resultado-ganaste", "resultado-perdiste");
+    RESULTADO.classList.remove("resultado-empate", "resultado-ganaste", "resultado-perdiste");
 
-      if (resultadoTexto === "EMPATE") {
+    if (resultadoTexto === "EMPATE") {
         RESULTADO.classList.add("resultado-empate");
-      } else if (resultadoTexto === "GANASTE") {
-        RESULTADO.classList.add("resultado-ganaste");
-      } else if (resultadoTexto === "PERDISTE") {
-        RESULTADO.classList.add("resultado-perdiste");
-      }
+        RESULTADO.classList.add('agrandar');
+        setTimeout(() => {
+            RESULTADO.classList.remove('agrandar');
+        }, 600);
 
-      RESULTADO.textContent = resultadoTexto;
+    } else if (resultadoTexto === "GANASTE") {
+        RESULTADO.classList.add("resultado-ganaste");
+        RESULTADO.classList.add('agrandar');
+        setTimeout(() => {
+            RESULTADO.classList.remove('agrandar');
+        }, 600);
+
+    } else if (resultadoTexto === "PERDISTE") {
+        RESULTADO.classList.add("resultado-perdiste");
+        RESULTADO.classList.add('agrandar');
+        setTimeout(() => {
+            RESULTADO.classList.remove('agrandar');
+        }, 600);
+
     }
 
-    let juegoBloqueado = false;
+    RESULTADO.textContent = resultadoTexto;
+}
 
-    BOTONES.forEach(boton => {
-      boton.addEventListener('click', () => {
+let juegoBloqueado = false;
+
+BOTONES.forEach(boton => {
+    boton.addEventListener('click', () => {
 
         const eleccionJugador = boton.id;
         const eleccionCompu = opcionComputadora();
@@ -63,9 +78,13 @@ const OPCIONES = ['piedra', 'papel', 'tijera'];
 
 
 
-        IMG_JUG.classList.add('agrandar');  
+        IMG_JUG.classList.add('agrandar');
         setTimeout(() => {
-          IMG_JUG.classList.remove('agrandar');  
+            IMG_JUG.classList.remove('agrandar');
+        }, 600);
+        VS.classList.add('agrandar');
+        setTimeout(() => {
+            VS.classList.remove('agrandar');
         }, 600);
 
 
@@ -74,51 +93,53 @@ const OPCIONES = ['piedra', 'papel', 'tijera'];
 
 
         setTimeout(() => {
-          mostrarContador(() => {
-          IMG_COMP.src = `img/${eleccionCompu}.png`;
-          IMG_COMP.style.visibility = "visible";
+            mostrarContador(() => {
+                IMG_COMP.src = `img/${eleccionCompu}.png`;
+                IMG_COMP.style.visibility = "visible";
 
-          IMG_COMP.classList.add('agrandar');
-          setTimeout(() => {
-            IMG_COMP.classList.remove('agrandar');
-          }, 600);
+                IMG_COMP.classList.add('agrandar');
+                setTimeout(() => {
+                    IMG_COMP.classList.remove('agrandar');
+                }, 600);
 
-          setTimeout(() => {
-            const mensaje = decidirGanador(eleccionJugador, eleccionCompu);
-            mostrarResultado (mensaje);
-
-          }, 1000);
+                setTimeout(() => {
+                    const mensaje = decidirGanador(eleccionJugador, eleccionCompu);
+                    mostrarResultado(mensaje);
 
 
+                }, 1000);
 
-          });
+
+
+            });
         }, 1000);
-
-
-      });
 
 
     });
 
-  
-    function mostrarContador(next) {
-      const ctr = document.getElementById('contador');
 
-      function animarNumero(numero, callback) {
+});
+
+
+function mostrarContador(next) {
+    const ctr = document.getElementById('contador');
+
+    function animarNumero(numero, callback) {
         ctr.classList.remove('mostrar-contador');
         void ctr.offsetWidth;
         ctr.textContent = numero;
         ctr.classList.add('mostrar-contador');
         setTimeout(callback, 1000);
-      }
-
-      animarNumero('3', () => {
-        animarNumero('2', () => {
-          animarNumero('1', () => {
-            ctr.classList.remove('mostrar-contador');
-            ctr.textContent = '';
-            next();
-          });
-        });
-      });
     }
+
+    animarNumero('3', () => {
+        animarNumero('2', () => {
+            animarNumero('1', () => {
+                ctr.classList.remove('mostrar-contador');
+                ctr.textContent = '';
+                next();
+            });
+        });
+    });
+}
+ 

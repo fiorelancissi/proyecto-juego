@@ -131,7 +131,20 @@ body {
       font-size: 40px;
     }
 
+    .resultado-ganaste.agrandar {
+      animation: crecerVolver 1s ease-in-out;
+    }
+        .resultado-empate.agrandar {
+      animation: crecerVolver 1s ease-in-out;
+    }
+        .resultado-perdiste.agrandar {
+      animation: crecerVolver 1s ease-in-out;
+    }
+
     .resultado img.agrandar {
+      animation: crecer 0.5s ease;
+    }
+    #vs.agrandar {
       animation: crecer 0.5s ease;
     }
 
@@ -159,10 +172,16 @@ body {
     } 
 
     @media (max-width: 600px) {
-      h1 {
+      body{ 
+        height: 100vh;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        }
+        h1 {
         font-size: 2rem;
         text-align: center;
-        color: rgb(54, 21, 84);
+        color: rgb(20, 55, 24);
       }
 
       .container {
@@ -181,7 +200,7 @@ body {
             transform: scale(1.25);
         }
         .opciones {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(15px, 1fr));
         }
 
     }
