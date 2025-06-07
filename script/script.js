@@ -1,16 +1,22 @@
 const OPCIONES = ['piedra', 'papel', 'tijera'];
 
 const BOTONES = document.querySelectorAll('.opcion');
-const IMG_JUG = document.getElementById("imagenEleccionJugador");
-const IMG_COMP = document.getElementById("imagenEleccionCompu");
+const IMAGEN_JUGADOR = document.getElementById("imagenEleccionJugador");
+const IMAGEN_COMPUTADORA = document.getElementById("imagenEleccionCompu");
 const VS = document.getElementById("vs");
 const RESULTADO = document.getElementById("mensajeResultado");
 const ENUNCIADO = document.getElementById("enunciado");
 const CONTADOR = document.getElementById("contador");
+let boolean;
+
+function setBotonesDeshabilitados(boolean) {
+    BOTONES.forEach(b => b.disabled = boolean);
+}
+setBotonesDeshabilitados(false);
 
 function opcionComputadora() {
-    const RANDOM_INDEX = Math.floor(Math.random() * OPCIONES.length);
-    return OPCIONES[RANDOM_INDEX];
+    const randomIndex = Math.floor(Math.random() * OPCIONES.length);
+    return OPCIONES[randomIndex];
 }
 
 
@@ -20,9 +26,9 @@ function decidirGanador(jugador, computadora) {
     if (jugador === computadora) {
         mensaje = "EMPATE";
     } else if (
-        (jugador === 'piedra' && computadora === 'tijera') ||
-        (jugador === 'papel' && computadora === 'piedra') ||
-        (jugador === 'tijera' && computadora === 'papel')
+        (jugador === OPCIONES[0] && computadora === OPCIONES[2]) ||
+        (jugador === OPCIONES[1] && computadora === OPCIONES[0]) ||
+        (jugador === OPCIONES[2] && computadora === OPCIONES[1])
     ) {
         mensaje = "GANASTE";
     } else {
@@ -32,93 +38,76 @@ function decidirGanador(jugador, computadora) {
 }
 
 function mostrarResultado(resultadoTexto) {
+    RESULTADO.classList.remove("resultado--empate", "resultado--ganaste", "resultado--perdiste", "agrandar");
 
-    RESULTADO.classList.remove("resultado-empate", "resultado-ganaste", "resultado-perdiste");
+    void RESULTADO.offsetWidth;
 
     if (resultadoTexto === "EMPATE") {
-        RESULTADO.classList.add("resultado-empate");
-        RESULTADO.classList.add('agrandar');
-        setTimeout(() => {
-            RESULTADO.classList.remove('agrandar');
-        }, 600);
-
+        RESULTADO.classList.add("resultado--empate", "agrandar");
     } else if (resultadoTexto === "GANASTE") {
-        RESULTADO.classList.add("resultado-ganaste");
-        RESULTADO.classList.add('agrandar');
-        setTimeout(() => {
-            RESULTADO.classList.remove('agrandar');
-        }, 600);
-
+        RESULTADO.classList.add("resultado--ganaste", "agrandar");
     } else if (resultadoTexto === "PERDISTE") {
-        RESULTADO.classList.add("resultado-perdiste");
-        RESULTADO.classList.add('agrandar');
-        setTimeout(() => {
-            RESULTADO.classList.remove('agrandar');
-        }, 600);
-
+        RESULTADO.classList.add("resultado--perdiste", "agrandar");
     }
 
     RESULTADO.textContent = resultadoTexto;
 }
 
-let juegoBloqueado = false;
+
+function animarElemento(elemento) {
+    elemento.classList.add('agrandar');
+    setTimeout(() => {
+        elemento.classList.remove('agrandar');
+    }, 600);
+}
 
 BOTONES.forEach(boton => {
+
     boton.addEventListener('click', () => {
 
+        setBotonesDeshabilitados(true);
         const eleccionJugador = boton.id;
-        const eleccionCompu = opcionComputadora();
-        ENUNCIADO.style.visibility = "hidden";
-
-
-
-        IMG_JUG.src = `img/${eleccionJugador}.png`;
-        IMG_JUG.style.visibility = "visible";
-        VS.style.visibility = "visible";
-
-
-
-        IMG_JUG.classList.add('agrandar');
-        setTimeout(() => {
-            IMG_JUG.classList.remove('agrandar');
-        }, 600);
-        VS.classList.add('agrandar');
-        setTimeout(() => {
-            VS.classList.remove('agrandar');
-        }, 600);
-
-
-        RESULTADO.textContent = "";
-        IMG_COMP.style.visibility = "hidden"
-
-
-        setTimeout(() => {
-            mostrarContador(() => {
-                IMG_COMP.src = `img/${eleccionCompu}.png`;
-                IMG_COMP.style.visibility = "visible";
-
-                IMG_COMP.classList.add('agrandar');
-                setTimeout(() => {
-                    IMG_COMP.classList.remove('agrandar');
-                }, 600);
-
-                setTimeout(() => {
-                    const mensaje = decidirGanador(eleccionJugador, eleccionCompu);
-                    mostrarResultado(mensaje);
-
-
-                }, 1000);
-
-
-
-            });
-        }, 1000);
+        jugarRonda(eleccionJugador);
 
 
     });
-
-
 });
+
+function jugarRonda(eleccionJugador) {
+    const eleccionCompu = opcionComputadora();
+    ENUNCIADO.style.visibility = "hidden";
+
+
+    IMAGEN_JUGADOR.src = `img/${eleccionJugador}.png`;
+    IMAGEN_JUGADOR.style.visibility = "visible";
+    VS.style.visibility = "visible";
+
+
+
+    animarElemento(IMAGEN_JUGADOR);
+    animarElemento(VS);
+
+
+    RESULTADO.textContent = "";
+    IMAGEN_COMPUTADORA.style.visibility = "hidden"
+
+
+    setTimeout(() => {
+        mostrarContador(() => {
+
+            IMAGEN_COMPUTADORA.src = `img/${eleccionCompu}.png`;
+            IMAGEN_COMPUTADORA.style.visibility = "visible";
+
+            animarElemento(IMAGEN_COMPUTADORA);
+
+            setTimeout(() => {
+                const mensaje = decidirGanador(eleccionJugador, eleccionCompu);
+                mostrarResultado(mensaje);
+                setBotonesDeshabilitados(false);
+            }, 1000);
+        });
+    }, 1000);
+}
 
 
 function mostrarContador(next) {
@@ -142,4 +131,3 @@ function mostrarContador(next) {
         });
     });
 }
- 
