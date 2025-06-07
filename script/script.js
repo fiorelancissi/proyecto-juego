@@ -8,10 +8,19 @@ const RESULTADO = document.getElementById("mensajeResultado");
 const ENUNCIADO = document.getElementById("enunciado");
 const CONTADOR = document.getElementById("contador");
 let boolean;
+const clickSound = new Audio('assets/sounds/click.mp3');
+const winSound = new Audio('assets/sounds/win.mp3');
+const loseSound = new Audio('assets/sounds/lose.mp3');
+const drawSound = new Audio('assets/sounds/draw.mp3');
 
 function setBotonesDeshabilitados(boolean) {
-    BOTONES.forEach(b => b.disabled = boolean);
+
+    BOTONES.forEach(b => {
+        b.disabled = boolean;
+        b.classList.toggle("desactivado", boolean);
+    });
 }
+
 setBotonesDeshabilitados(false);
 
 function opcionComputadora() {
@@ -44,10 +53,13 @@ function mostrarResultado(resultadoTexto) {
 
     if (resultadoTexto === "EMPATE") {
         RESULTADO.classList.add("resultado--empate", "agrandar");
+        drawSound.play();
     } else if (resultadoTexto === "GANASTE") {
         RESULTADO.classList.add("resultado--ganaste", "agrandar");
+        winSound.play();
     } else if (resultadoTexto === "PERDISTE") {
         RESULTADO.classList.add("resultado--perdiste", "agrandar");
+        loseSound.play();
     }
 
     RESULTADO.textContent = resultadoTexto;
@@ -64,6 +76,7 @@ function animarElemento(elemento) {
 BOTONES.forEach(boton => {
 
     boton.addEventListener('click', () => {
+        clickSound.play();
 
         setBotonesDeshabilitados(true);
         const eleccionJugador = boton.id;
