@@ -1,211 +1,240 @@
 body {
-      font-family: 'Familjen Grotesk', sans-serif;
-      color: rgb(0, 0, 0);
-      min-height: 100vh;
-      background-image: url('../img/background.jpg');
-      background-size: cover; 
-      background-position: center; 
-      background-repeat: no-repeat;
-      min-height: 100vh;
-    }
+    font-family: 'Familjen Grotesk', sans-serif;
+    color: rgb(0, 0, 0);
+    min-height: 100vh;
+    background-image: url('../img/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
 
-    .contenedor-juego {
-      display: grid;
-      grid-template-areas: 
-      "header"
-      "opciones"
-      "resultado";
-      gap: 10px;
-    }
-      
-    header {
-      margin-top: 0px;
-      grid-area: header;
-    }
+.contenedor-juego {
+    display: grid;
+    grid-template-areas:
+        "header"
+        "opciones"
+        "resultado";
+    gap: 10px;
+}
 
-    header h1 {
-      font-size: 40px;
-      text-align: center;
-      text-shadow: 2px 2px 5px rgb(54, 50, 57);
-    }
+header {
+    margin-top: 0px;
+    grid-area: header;
+}
 
-    #imagenEleccionJugador,
-    #imagenEleccionCompu,
-    #vs {
-      visibility: hidden;
-    }
+header h1 {
+    font-size: 40px;
+    text-align: center;
+    text-shadow: 2px 2px 5px rgb(54, 50, 57);
+}
 
-    .opciones {
-      display: grid;
-      grid-area: opciones;
-      margin-top: 45px;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+#imagenEleccionJugador,
+#imagenEleccionCompu,
+#vs {
+    visibility: hidden;
+}
 
-      grid-gap: 16px;
-      justify-items: center;
-      align-items: center;
-      text-align: center;
-      margin-bottom: 0px;
-    }
+.opciones {
+    display: grid;
+    grid-area: opciones;
+    margin-top: 45px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 
-    .opcion {
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
+    grid-gap: 16px;
+    justify-items: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 0px;
+}
 
-    .opcion img {
-      width: 150px;
-      height: 150px;
-      margin: 0px;
-    }
+.opcion {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
 
-    .opcion:hover {
-      filter: drop-shadow(8px 8px 20px rgba(0, 0, 0, 0.7));
-      transform: scale(1.25);
-    }
+.opcion img {
+    width: 150px;
+    height: 150px;
+    margin: 0px;
+}
 
-    .resultado {
-      display: grid;
-      grid-area: resultado;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: auto 20px auto auto;
-      grid-gap: 16px;
-      justify-items: center;
-      align-items: center;
-      text-align: center;
-      margin-top: 10px;
-    }
+.opcion:hover {
+    filter: drop-shadow(8px 8px 20px rgba(0, 0, 0, 0.7));
+    transform: scale(1.25);
+}
 
-
-    .resultado #enunciado  { grid-column: 1 / -1; }
-    .resultado #contador {grid-column: 1 / -1;}
-    .resultado #imagenEleccionJugador  { grid-column: 1 / 2; }
-    .resultado #vs { 
-      grid-column: 2 / 3; 
-      text-shadow: 2px 2px 5px rgb(60, 85, 63);
-      font-size: 35px;
-      color: white;
-    }
-    .resultado #imagenEleccionCompu    { grid-column: 3 / 4; }
-    .resultado #mensajeResultado  { grid-column: 1 / -1; }
-
-    #contador {
-      font-size: 65px;
-      font-weight: bold;
-      color: rgb(20, 55, 24);
-    }
-
-    .mostrar-contador {
-      animation: zoom 0.5s ease;
-    }
-
-    @keyframes zoom {
-      from { transform: scale(0.5); }
-      to { transform: scale(1); }
-    }
-
-    .resultado img {
-      width: 150px;
-      height: 150px;
-      margin: 0px;
-      transition: transform 0.3 ease-in-out;
-    }
-
-    .resultado-empate {
-      color: yellow;
-      text-shadow: 2px 2px 5px rgb(156, 156, 55);
-      animation: crecerVolver 1s ease-in-out;
-      font-size: 40px;
-    }
-    .resultado-ganaste {
-      color: green;
-      text-shadow: 2px 2px 5px rgb(34, 71, 34);
-      animation: crecerVolver 1s ease-in-out;
-      font-size: 40px;
-    }
-    .resultado-perdiste {
-      color: red;
-      text-shadow: 2px 2px 5px rgb(88, 32, 32);
-      animation: crecerVolver 1s ease-in-out;
-      font-size: 40px;
-    }
-
-    .resultado-ganaste.agrandar {
-      animation: crecerVolver 1s ease-in-out;
-    }
-        .resultado-empate.agrandar {
-      animation: crecerVolver 1s ease-in-out;
-    }
-        .resultado-perdiste.agrandar {
-      animation: crecerVolver 1s ease-in-out;
-    }
-
-    .resultado img.agrandar {
-      animation: crecer 0.5s ease;
-    }
-    #vs.agrandar {
-      animation: crecer 0.5s ease;
-    }
+.resultado {
+    display: grid;
+    grid-area: resultado;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto 20px auto auto;
+    grid-gap: 16px;
+    justify-items: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 10px;
+}
 
 
-    @keyframes crecer {
-      from {
-        transform: scale(0);
-      }
+.resultado #enunciado {
+    grid-column: 1 / -1;
+}
 
-      to {
+.resultado #contador {
+    grid-column: 1 / -1;
+}
+
+.resultado #imagenEleccionJugador {
+    grid-column: 1 / 2;
+}
+
+.resultado #vs {
+    grid-column: 2 / 3;
+    text-shadow: 2px 2px 5px rgb(60, 85, 63);
+    font-size: 35px;
+    color: white;
+}
+
+.resultado #imagenEleccionCompu {
+    grid-column: 3 / 4;
+}
+
+.resultado #mensajeResultado {
+    grid-column: 1 / -1;
+}
+
+#contador {
+    font-size: 65px;
+    font-weight: bold;
+    color: rgb(20, 55, 24);
+}
+
+.mostrar-contador {
+    animation: zoom 0.5s ease;
+}
+
+@keyframes zoom {
+    from {
+        transform: scale(0.5);
+    }
+
+    to {
         transform: scale(1);
-      }
+    }
+}
+
+.resultado img {
+    width: 150px;
+    height: 150px;
+    margin: 0px;
+    transition: transform 0.3 ease-in-out;
+}
+
+.resultado-empate {
+    color: yellow;
+    text-shadow: 2px 2px 5px rgb(156, 156, 55);
+    animation: crecerVolver 1s ease-in-out;
+    font-size: 40px;
+}
+
+.resultado-ganaste {
+    color: green;
+    text-shadow: 2px 2px 5px rgb(34, 71, 34);
+    animation: crecerVolver 1s ease-in-out;
+    font-size: 40px;
+}
+
+.resultado-perdiste {
+    color: red;
+    text-shadow: 2px 2px 5px rgb(88, 32, 32);
+    animation: crecerVolver 1s ease-in-out;
+    font-size: 40px;
+}
+
+.resultado-ganaste.agrandar {
+    animation: crecerVolver 1s ease-in-out;
+}
+
+.resultado-empate.agrandar {
+    animation: crecerVolver 1s ease-in-out;
+}
+
+.resultado-perdiste.agrandar {
+    animation: crecerVolver 1s ease-in-out;
+}
+
+.resultado img.agrandar {
+    animation: crecer 0.5s ease;
+}
+
+#vs.agrandar {
+    animation: crecer 0.5s ease;
+}
+
+
+@keyframes crecer {
+    from {
+        transform: scale(0);
     }
 
-    @keyframes crecerVolver {
-      0% {
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes crecerVolver {
+    0% {
         transform: scale(0);
-      }
-      50% {
+    }
+
+    50% {
         transform: scale(2);
-      }
-      100% {
-        transform: scale(1);
-      }
-    } 
+    }
 
-    @media (max-width: 600px) {
-      body{ 
-        height: 100vh;
-        overflow: hidden;
+    100% {
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        height: auto;
         margin: 0;
         padding: 0;
-        }
-        h1 {
+    }
+
+    h1 {
         font-size: 2rem;
         text-align: center;
         color: rgb(20, 55, 24);
-      }
+    }
 
-      .container {
+    .container {
         flex-direction: column;
         align-items: center;
         gap: 10px;
-      }
+    }
 
-      .opcion img {
+    .opcion img {
         width: 120px;
         height: 120px;
         margin: 0px;
-        }
-        .opcion:focus {
-            filter: drop-shadow(8px 8px 20px rgba(0, 0, 0, 0.7));
-            transform: scale(1.25);
-        }
-        .opciones {
+    }
+
+    .opcion:focus {
+        filter: drop-shadow(8px 8px 20px rgba(0, 0, 0, 0.7));
+        transform: scale(1.25);
+    }
+
+    .opciones {
         grid-template-columns: repeat(auto-fit, minmax(15px, 1fr));
-        }
-
     }
 
-    section {
-      margin: 0;
-      top: 0;
-    }
+}
+
+section {
+    margin: 0;
+    top: 0;
+}
