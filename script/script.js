@@ -78,7 +78,10 @@ BOTONES.forEach(boton => {
     boton.addEventListener('click', () => {
         clickSound.play();
 
+        setTimeout(() => {
         setBotonesDeshabilitados(true);
+        }, 00);
+        
         const eleccionJugador = boton.id;
         jugarRonda(eleccionJugador);
 
