@@ -13,7 +13,7 @@ Diseñar una interfaz amigable y visualmente atractiva con CSS.
 
 Mejorar habilidades en accesibilidad mediante el uso de textos alternativos y estructura semántica.
 
-⚙️ Tecnologías Utilizadas
+Tecnologías Utilizadas
 HTML5: Para la estructura de la página.
 
 CSS3: Para el estilo visual y la presentación responsiva.
@@ -61,6 +61,6 @@ Adaptar el diseño para dispositivos móviles con diseño responsive avanzado.
 
 Integrar tests automatizados para validar la lógica del juego.
 
-Sobre mí
-Hola, soy Fiorella, estudiante de Análisis de Sistemas y mesera con experiencia en desarrollo web front-end, particularmente en HTML, CSS, JavaScript y bases de datos SQL. Este proyecto forma parte de mi formación práctica para fortalecer habilidades en desarrollo web y lógica de programación.
+Sobre mí: 
+Hola, soy Fiorella, estudiante de Análisis de Sistemas con experiencia en desarrollo web front-end, particularmente en HTML, CSS, JavaScript y bases de datos SQL. Este proyecto forma parte de mi formación práctica para fortalecer habilidades en desarrollo web y lógica de programación.
 
