@@ -48,7 +48,7 @@ Se muestra un mensaje que indica si el jugador ganó, perdió o empató.
 
 Se puede reiniciar la partida para jugar de nuevo.
 
-💡 Posibles mejoras futuras
+Posibles mejoras futuras
 Agregar animaciones para hacer la experiencia más dinámica.
 
 Implementar un sistema de puntajes para llevar un registro de partidas ganadas y perdidas.
@@ -61,6 +61,6 @@ Adaptar el diseño para dispositivos móviles con diseño responsive avanzado.
 
 Integrar tests automatizados para validar la lógica del juego.
 
-🤝 Sobre mí
+Sobre mí
 Hola, soy Fiorella, estudiante de Análisis de Sistemas y mesera con experiencia en desarrollo web front-end, particularmente en HTML, CSS, JavaScript y bases de datos SQL. Este proyecto forma parte de mi formación práctica para fortalecer habilidades en desarrollo web y lógica de programación.
 
