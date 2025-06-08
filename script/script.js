@@ -12,6 +12,7 @@ const clickSound = new Audio('assets/sounds/click.mp3');
 const winSound = new Audio('assets/sounds/win.mp3');
 const loseSound = new Audio('assets/sounds/lose.mp3');
 const drawSound = new Audio('assets/sounds/draw.mp3');
+const BOTON_REINICIAR = document.querySelectorAll('.botonReiniciar');
 
 function setBotonesDeshabilitados(boolean) {
 
@@ -79,9 +80,9 @@ BOTONES.forEach(boton => {
         clickSound.play();
 
         setTimeout(() => {
-        setBotonesDeshabilitados(true);
-        }, 00);
-        
+            setBotonesDeshabilitados(true);
+        }, 300);
+
         const eleccionJugador = boton.id;
         jugarRonda(eleccionJugador);
 
@@ -105,7 +106,10 @@ function jugarRonda(eleccionJugador) {
 
 
     RESULTADO.textContent = "";
-    IMAGEN_COMPUTADORA.style.visibility = "hidden"
+    IMAGEN_COMPUTADORA.style.visibility = "hidden";
+    BOTON_REINICIAR.forEach(boton => {
+  boton.style.visibility = "hidden";
+});
 
 
     setTimeout(() => {
@@ -119,6 +123,9 @@ function jugarRonda(eleccionJugador) {
             setTimeout(() => {
                 const mensaje = decidirGanador(eleccionJugador, eleccionCompu);
                 mostrarResultado(mensaje);
+                BOTON_REINICIAR.forEach(boton => {
+  boton.style.visibility = "visible";
+});
                 setBotonesDeshabilitados(false);
             }, 1000);
         });

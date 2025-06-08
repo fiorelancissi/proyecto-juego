@@ -36,7 +36,8 @@ header h1 {
 
 #imagenEleccionJugador,
 #imagenEleccionCompu,
-#vs {
+#vs,
+.botonReiniciar {
     visibility: hidden;
 }
 
@@ -82,7 +83,7 @@ header h1 {
     display: grid;
     grid-area: resultado;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: auto 20px auto auto;
+    grid-template-rows: auto 20px auto auto auto;
     grid-gap: 16px;
     justify-items: center;
     align-items: center;
@@ -121,6 +122,23 @@ header h1 {
 
 .resultado #mensajeResultado {
     grid-column: 1 / -1;
+}
+
+.botonReiniciar {
+    background-color: rgba(250, 235, 215, 0.508);
+    border: none;
+    width: 80px;
+    height: 80px;
+    border-radius: 50px;
+    grid-column: 1/-1;
+    margin-bottom: 30px;
+}
+
+.botonReiniciar:hover {
+    cursor: pointer;
+    filter: drop-shadow(8px 8px 20px black);
+    transform: scale(1.25);
+    transition: transform 0.3s ease-in-out;
 }
 
 .resultado img {
@@ -172,6 +190,7 @@ header h1 {
     from {
         transform: scale(0.5);
     }
+
     to {
         transform: scale(1);
     }
@@ -181,6 +200,7 @@ header h1 {
     from {
         transform: scale(0);
     }
+
     to {
         transform: scale(1);
     }
@@ -190,9 +210,11 @@ header h1 {
     0% {
         transform: scale(0);
     }
+
     50% {
         transform: scale(2);
     }
+
     100% {
         transform: scale(1);
     }
