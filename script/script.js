@@ -7,15 +7,15 @@ const VS = document.getElementById("vs");
 const RESULTADO = document.getElementById("mensajeResultado");
 const ENUNCIADO = document.getElementById("enunciado");
 const CONTADOR = document.getElementById("contador");
-let boolean;
+
 const clickSound = new Audio('assets/sounds/click.mp3');
 const winSound = new Audio('assets/sounds/win.mp3');
 const loseSound = new Audio('assets/sounds/lose.mp3');
 const drawSound = new Audio('assets/sounds/draw.mp3');
-const BOTON_REINICIAR = document.querySelectorAll('.botonReiniciar');
+
+const BOTON_REINICIAR = document.getElementById('.botonReiniciar');
 
 function setBotonesDeshabilitados(boolean) {
-
     BOTONES.forEach(b => {
         b.disabled = boolean;
         b.classList.toggle("desactivado", boolean);
@@ -29,27 +29,22 @@ function opcionComputadora() {
     return OPCIONES[randomIndex];
 }
 
-
-
 function decidirGanador(jugador, computadora) {
-    var mensaje = "";
     if (jugador === computadora) {
-        mensaje = "EMPATE";
+        return "EMPATE";
     } else if (
-        (jugador === OPCIONES[0] && computadora === OPCIONES[2]) ||
-        (jugador === OPCIONES[1] && computadora === OPCIONES[0]) ||
-        (jugador === OPCIONES[2] && computadora === OPCIONES[1])
+        (jugador === 'piedra' && computadora === 'tijera') ||
+        (jugador === 'papel' && computadora === 'piedra') ||
+        (jugador === 'tijera' && computadora === 'papel')
     ) {
-        mensaje = "GANASTE";
+        return "GANASTE";
     } else {
-        mensaje = "PERDISTE";
+        return "PERDISTE";
     }
-    return mensaje;
 }
 
 function mostrarResultado(resultadoTexto) {
     RESULTADO.classList.remove("resultado--empate", "resultado--ganaste", "resultado--perdiste", "agrandar");
-
     void RESULTADO.offsetWidth;
 
     if (resultadoTexto === "EMPATE") {
@@ -64,8 +59,13 @@ function mostrarResultado(resultadoTexto) {
     }
 
     RESULTADO.textContent = resultadoTexto;
-}
 
+    setTimeout(() => {
+        BOTON_REINICIAR.forEach(boton => {
+            boton.style.display = "visible";
+        });
+    }, 1000);
+}
 
 function animarElemento(elemento) {
     elemento.classList.add('agrandar');
@@ -75,7 +75,6 @@ function animarElemento(elemento) {
 }
 
 BOTONES.forEach(boton => {
-
     boton.addEventListener('click', () => {
         clickSound.play();
 
@@ -85,8 +84,24 @@ BOTONES.forEach(boton => {
 
         const eleccionJugador = boton.id;
         jugarRonda(eleccionJugador);
+    });
+});
 
+BOTON_REINICIAR.forEach(boton => {
+    boton.addEventListener('click', () => {
+        // Resetear estado del juego
+        IMAGEN_JUGADOR.style.visibility = "hidden";
+        IMAGEN_COMPUTADORA.style.visibility = "hidden";
+        VS.style.visibility = "hidden";
+        RESULTADO.textContent = "";
+        ENUNCIADO.style.visibility = "visible";
+        CONTADOR.textContent = "";
 
+        // Ocultar botón "Volver a jugar"
+        BOTON_REINICIAR.forEach(b => b.style.visibility = "hidden");
+
+        // Habilitar botones de juego
+        setBotonesDeshabilitados(false);
     });
 });
 
@@ -94,44 +109,31 @@ function jugarRonda(eleccionJugador) {
     const eleccionCompu = opcionComputadora();
     ENUNCIADO.style.visibility = "hidden";
 
-
     IMAGEN_JUGADOR.src = `img/${eleccionJugador}.png`;
     IMAGEN_JUGADOR.style.visibility = "visible";
     VS.style.visibility = "visible";
 
-
-
     animarElemento(IMAGEN_JUGADOR);
     animarElemento(VS);
 
-
     RESULTADO.textContent = "";
     IMAGEN_COMPUTADORA.style.visibility = "hidden";
-    BOTON_REINICIAR.forEach(boton => {
-  boton.style.visibility = "hidden";
-});
-
 
     setTimeout(() => {
         mostrarContador(() => {
-
             IMAGEN_COMPUTADORA.src = `img/${eleccionCompu}.png`;
             IMAGEN_COMPUTADORA.style.visibility = "visible";
-
             animarElemento(IMAGEN_COMPUTADORA);
 
             setTimeout(() => {
                 const mensaje = decidirGanador(eleccionJugador, eleccionCompu);
                 mostrarResultado(mensaje);
-                BOTON_REINICIAR.forEach(boton => {
-  boton.style.visibility = "visible";
-});
+
                 setBotonesDeshabilitados(false);
             }, 1000);
         });
     }, 1000);
-}
-
+} // 👈 CORREGIDO: antes cerraba mal la función con punto y coma ";"
 
 function mostrarContador(next) {
     const ctr = document.getElementById('contador');
